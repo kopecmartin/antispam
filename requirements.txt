@@ -1,0 +1,4 @@
+# virtualenv -p python3 <venv_name>
+
+argparse
+spam-lists
