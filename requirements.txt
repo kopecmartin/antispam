@@ -1,4 +1,5 @@
 # virtualenv -p python3 <venv_name>
 
 argparse
+pygtrie
 spam-lists
