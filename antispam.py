@@ -1,4 +1,4 @@
-#!/bin/python3
+#!.venv/bin/python3
 
 # #######################
 # Project: antispam
@@ -26,19 +26,19 @@ t.init(swear_words_EN)
 
 class Email:
     """
-    Email class represents an email, implements operations over it
-    and parses stores information about it
+    Email class represents an email, implements operations over it,
+    parses and stores information about it
     """
 
-    def __init__(self, email_path, verbose=False, strictness=1):
+    def __init__(self, email_path, verbose=True, strictness=1):
         """Initializes an email.
 
-        verbose - If True prints reason why the mail was marked as spam,
-                  default is False
-        strictness - Represents how many banned words to be found is needed
-                     to clasify the email as spam.
+        verbose - If True prints reason why the mail was marked as a spam,
+                  default is True
+        strictness - Represents how many banned words is needed to be found
+                     to clasify the email as a spam.
                      0 tries to find all, but if at least one is find,
-                     the email will be marked as spam.
+                     the email will be marked as a spam.
                      Default value is 1
         """
         self.email_path = email_path
@@ -131,7 +131,7 @@ class Email:
             if not t.banned_word_prefix(word):
                 return False
             try:
-                # check, if the following char is a one of the delimiters
+                # check, if the following char is one of the delimiters
                 # to avoid matching a prefix of an another word in the text
                 delimiter = [" ", "-", ",", "=", "!", "?", "\"", ")", ">",
                              "<", "*", "~", ":", "$"]
@@ -145,7 +145,7 @@ class Email:
         """Searches for banned words in the given text.
 
         text - string
-        Returns True if found any banned word, False otherwise.
+        Returns True if any banned word is found, False otherwise.
         """
         found = []
         for i in range(len(text)):
@@ -182,7 +182,6 @@ def contains_only_capital_letters(sentence):
 
 
 if __name__ == "__main__":
-
     # arguments handler
     parser = argparse.ArgumentParser(description='Python script for a spam ' +
                                                  'detection')
@@ -190,19 +189,21 @@ if __name__ == "__main__":
     parser.add_argument('EMAILS', nargs='+', help='Path(s) to the email(s) ' +
                                                   'file(s) to be checked')
 
-    parser.add_argument('--verbose', action='store_true', help='Print the ' +
-                        'reason, why the email was marked as a spam')
+    parser.add_argument('--non-verbose', action='store_false', help='Do not ' +
+                        'print the reason, why the email was marked as a ' +
+                        'spam. Default is false.')
 
     parser.add_argument('--strictness', default=1, type=int,
                         help='Number of banned words found to mark ' +
-                        'the email as a spam, number 0 prints all found')
+                        'the email as a spam, number 0 prints all found. ' +
+                        'Default is 1')
 
     args = vars(parser.parse_args())
 
     # iterate over emails and run spam detection
     for email_path in args['EMAILS']:
         try:
-            E = Email(email_path, args['verbose'], args['strictness'])
+            E = Email(email_path, args['non_verbose'], args['strictness'])
         except FileNotFoundError:
             print("The file was not found: ", email_path)
             continue
